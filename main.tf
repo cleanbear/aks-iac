@@ -23,12 +23,12 @@ module "Vnet" {
   subnet_names        = var.subnet_names
   subnet_prefixes     = var.subnet_prefixes
    subnet_service_endpoints = {
-    "proearn-nonprod-pep-subnet"     = ["Microsoft.KeyVault"]
-    "proearn-nonprod-aks-subnet"     = ["Microsoft.KeyVault"]
-    "proearn-nonprod-general-subnet" = ["Microsoft.KeyVault"]
+    "mytest-np-pep-subnet"     = ["Microsoft.KeyVault"]
+    "mytest-np-aks-subnet"     = ["Microsoft.KeyVault"]
+    "mytest-np-general-subnet" = ["Microsoft.KeyVault"]
   }
   subnet_enforce_private_link_endpoint_network_policies = {
-    "proearn-nonprod-pep-subnet" = true
+    "mytest-np-pep-subnet" = true
   }
   tags = local.tags
 }

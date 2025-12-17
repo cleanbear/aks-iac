@@ -6,14 +6,14 @@ pipeline {
     stages {
         stage('getting Config File'){
             steps {
-                configFileProvider([configFile(fileId: 'proearn-nonprod-backend.conf', targetLocation: 'proearn-nonprod-backend.conf')]) {
+                configFileProvider([configFile(fileId: 'mytest-np-backend.conf', targetLocation: 'mytest-np-backend.conf')]) {
                     // some block
                 }
             }
         }
         stage('getting tfvars File'){
             steps {
-                configFileProvider([configFile(fileId: 'proearn-nonprod.tfvarsfile', targetLocation: 'terraform.tfvars')]) {
+                configFileProvider([configFile(fileId: 'mytest-np.tfvarsfile', targetLocation: 'terraform.tfvars')]) {
                     // some block
                 }
             }
@@ -22,9 +22,9 @@ pipeline {
             steps {
                 script {
                     echo 'Generating provider.tf...'
-                     withCredentials([azureServicePrincipal("PROearn-Eximius-non-prod-sp-terraform")]) {
+                     withCredentials([azureServicePrincipal("mytest-np-sp-terraform")]) {
                         sh '''
-                            terraform init -upgrade -backend-config=proearn-nonprod-backend.conf -no-color
+                            terraform init -upgrade -backend-config=mytest-np-backend.conf -no-color
                         '''
                     }
                 }
@@ -33,7 +33,7 @@ pipeline {
         stage('TF Plan') {
             steps {
                 script {
-                    withCredentials([azureServicePrincipal("PROearn-Eximius-non-prod-sp-terraform")]) {
+                    withCredentials([azureServicePrincipal("mytest-np-sp-terraform")]) {
                         env.$ARM_CLIENT_ID = AZURE_CLIENT_ID
                         env.$ARM_CLIENT_SECRET = AZURE_CLIENT_SECRET                         
                         env.$ARM_TENANT_ID = AZURE_TENANT_ID
