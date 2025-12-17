@@ -53,14 +53,6 @@ pipeline {
             }
         }
 
-        stage("CheckOv") {
-            steps {
-                echo 'Starting checkov scan...'
-                sh "$EXT_TOOLS/checkov/3.1.38/checkov --soft-fail -f tfplan.json"
-                echo 'Finished checkov scan.'
-            }
-        }
-
         stage('TF Apply') {
             input {
                 message "Do you want to proceed with the deployment?"

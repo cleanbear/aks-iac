@@ -2,10 +2,10 @@ locals {
 
   tags={
     Environment = "dev-qa"
-    Studio = "eximius"
-    Division = "exi"
-    Account_Manager = "Manish Tiwari"
-    Owner = "Ajay Kumar Singh"
+    Studio = "mytest"
+    Division = "my"
+    Account_Manager = "Guru"
+    Owner = "Gurukalyan"
   }
 
 }
