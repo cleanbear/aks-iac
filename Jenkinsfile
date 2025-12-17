@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        terraform 'terraform-1.5.5'
+        terraform 'terraform-1.14.2'
     }
     stages {
         stage('getting Config File'){
