@@ -222,6 +222,8 @@ module "aks" {
   vnet_subnet_id                       = module.Vnet.vnet_subnets[1]
   role_based_access_control_enabled    = false
   rbac_aad                             = false
+  oidc_issuer_enabled                  = true
+  workload_identity_enabled            = true
   network_policy                       = "azure"
   network_plugin                       = "azure"
   cluster_log_analytics_workspace_name = var.log_analytics_ws_name
