@@ -67,6 +67,31 @@ pipeline {
             }
         }
 
+        stage('TF Destroy') {
+            input {
+                message "Do you want to destroy the infrastructure (irreversible)?"
+            }
+            steps {
+                script {
+                    withCredentials([azureServicePrincipal("mytest-np-sp-terraform")]) {
+                        // export ARM_ variables for terraform
+                        env.ARM_CLIENT_ID = AZURE_CLIENT_ID
+                        env.ARM_CLIENT_SECRET = AZURE_CLIENT_SECRET
+                        env.ARM_TENANT_ID = AZURE_TENANT_ID
+                        env.ARM_SUBSCRIPTION_ID = AZURE_SUBSCRIPTION_ID
+
+                        sh '''
+                            echo "----- Creating destroy plan -----"
+                            terraform plan -destroy -var "subscriptionID=${AZURE_SUBSCRIPTION_ID}" -var "clientid=${AZURE_CLIENT_ID}" -var "clientsecret=${AZURE_CLIENT_SECRET}" -var "tenantid=${AZURE_TENANT_ID}" -out=destroy.tfplan
+                            terraform show -no-color -json destroy.tfplan > destroy.tfplan.json
+                            echo "----- Applying destroy plan -----"
+                            terraform apply -no-color destroy.tfplan
+                        '''
+                    }
+                }
+            }
+        }
+
         stage('remove .tf files') {
             steps {
                 script {
