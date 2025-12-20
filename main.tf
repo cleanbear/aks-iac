@@ -243,6 +243,27 @@ module "aks" {
   depends_on = [ module.Vnet, azurerm_container_registry.acr ]
 }
 
+resource "azurerm_user_assigned_identity" "app_identity" {
+  name                = "aks-app-identity"
+  location            = var.location
+  resource_group_name = var.resourceGroupName
+}
+
+resource "azurerm_key_vault_access_policy" "kvpolicyaks" {
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = azurerm_user_assigned_identity.app_identity.principal_id
+  secret_permissions = ["Get", "List"]
+}
+
+resource "azurerm_federated_identity_credential" "app_fed_identity" {
+  name                = "aks-federated-id"
+  resource_group_name = var.resourceGroupName
+  audience            = ["api://AzureADTokenExchange"]
+  issuer              = module.aks.oidc_issuer_url
+  parent_id           = azurerm_user_assigned_identity.app_identity.id
+  subject             = "system:serviceaccount:testaks:workload-sa" # namespace:sa-name
+}
 ###################  API Management ###################
 
 resource "azurerm_api_management" "apim" {
